@@ -94,4 +94,24 @@ TEST_CASE("UpdateQuality")
       testGildedRose(Item{name, 0, 20}, Item{name, -1, 0});
     }
   }
+
+  SECTION("Conjured item")
+  {
+    constexpr const char* name = "Conjured";
+
+    SECTION("quality decrease twice as fast")
+    {
+      testGildedRose(Item{name, 10, 10}, Item{name, 9, 8});
+    }
+
+    SECTION("Quality should never be negative")
+    {
+      testGildedRose(Item{name, 10, 0}, Item{name, 9, 0});
+    }
+
+    SECTION("Once the sell-by day pass, quality degrade twice as faster")
+    {
+      testGildedRose(Item{name, 0, 10}, Item{name, -1, 6});
+    }
+  }
 }
