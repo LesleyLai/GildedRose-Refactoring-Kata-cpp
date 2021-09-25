@@ -1,5 +1,6 @@
 ---
 Checks: '*,
+-altera-*,
 -clang-analyzer-deadcode.DeadStores,
 -clang-analyzer-alpha.*,
 -modernize-use-trailing-return-type,
