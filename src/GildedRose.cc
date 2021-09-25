@@ -1,8 +1,9 @@
 #include "GildedRose.h"
 
-GildedRose::GildedRose(std::vector<Item> &items) : items(items) {}
+GildedRose::GildedRose(std::vector<Item>& items) : items(items) {}
 
-void GildedRose::updateQuality() {
+void GildedRose::updateQuality()
+{
   for (int i = 0; i < items.size(); i++) {
     if (items[i].name != "Aged Brie" &&
         items[i].name != "Backstage passes to a TAFKAL80ETC concert") {
@@ -47,9 +48,7 @@ void GildedRose::updateQuality() {
           items[i].quality = items[i].quality - items[i].quality;
         }
       } else {
-        if (items[i].quality < 50) {
-          items[i].quality = items[i].quality + 1;
-        }
+        if (items[i].quality < 50) { items[i].quality = items[i].quality + 1; }
       }
     }
   }

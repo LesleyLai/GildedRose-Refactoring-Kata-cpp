@@ -9,8 +9,8 @@ struct Item {
 
 class GildedRose {
 public:
-  std::vector<Item> &items;
-  GildedRose(std::vector<Item> &items);
+  std::vector<Item>& items;
+  GildedRose(std::vector<Item>& items);
 
   void updateQuality();
 };
