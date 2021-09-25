@@ -16,22 +16,82 @@ bool operator==(const Item& lhs, const Item& rhs)
          lhs.quality == rhs.quality;
 }
 
+void testGildedRose(Item input, const Item& expected_output)
+{
+  std::vector<Item> items;
+  items.push_back(input);
+  GildedRose{items}.updateQuality();
+  REQUIRE(items[0] == expected_output);
+}
+
 TEST_CASE("UpdateQuality")
 {
-  using ApprovalTests::Approvals;
-
-  std::vector<Item> items;
-  SECTION("both sell in days and quality decrease normally")
+  SECTION("Normal item")
   {
-    items.push_back(Item{"foo", 10, 10});
-    GildedRose{items}.updateQuality();
-    REQUIRE(items[0] == Item{"foo", 9, 9});
+    const std::string name = "foo";
+
+    SECTION("both sell in days and quality decrease normally")
+    {
+      testGildedRose(Item{name, 10, 10}, Item{name, 9, 9});
+    }
+
+    SECTION("Quality should never be negative")
+    {
+      testGildedRose(Item{name, 10, 0}, Item{name, 9, 0});
+    }
+
+    SECTION("Once the sell-by day pass, quality degrade twice as faster")
+    {
+      testGildedRose(Item{name, 0, 10}, Item{name, -1, 8});
+    }
   }
 
-  SECTION("Quality should never be negative")
+  SECTION("Aged Brie")
   {
-    items.push_back(Item{"foo", 10, 0});
-    GildedRose{items}.updateQuality();
-    REQUIRE(items[0] == Item{"foo", 9, 0});
+    const std::string name = "Aged Brie";
+    SECTION("increases quality over time")
+    {
+      testGildedRose(Item{name, 10, 10}, Item{name, 9, 11});
+    }
+    // why failed?
+    // testGildedRose(Item{"Aged Brie", 0, 10}, Item{"Aged Brie", -1, 11});
+
+    SECTION("Quality of an it is never more than 50")
+    {
+      testGildedRose(Item{name, 10, 50}, Item{name, 9, 50});
+    }
+  }
+
+  SECTION("Sulfuras")
+  {
+    SECTION("never has to be sold or decreases in Quality")
+    {
+      const std::string name = "Sulfuras, Hand of Ragnaros";
+      testGildedRose(Item{name, 10, 80}, Item{name, 10, 80});
+    }
+  }
+
+  SECTION("Backstage passes")
+  {
+    const std::string name = "Backstage passes to a TAFKAL80ETC concert";
+    SECTION("increases in Quality as its SellIn value approaches")
+    {
+      testGildedRose(Item{name, 20, 20}, Item{name, 19, 21});
+    }
+
+    SECTION("Quality increases by 2 when there are 10 days or less")
+    {
+      testGildedRose(Item{name, 10, 20}, Item{name, 9, 22});
+    }
+
+    SECTION("Quality increases by 3 when there are 5 days or less")
+    {
+      testGildedRose(Item{name, 5, 20}, Item{name, 4, 23});
+    }
+
+    SECTION("Quality drop to zero with concert ends")
+    {
+      testGildedRose(Item{name, 0, 20}, Item{name, -1, 0});
+    }
   }
 }
