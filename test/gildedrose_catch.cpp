@@ -13,8 +13,10 @@ std::ostream& operator<<(std::ostream& os, const Item& obj)
 TEST_CASE("UpdateQuality")
 {
   std::vector<Item> items;
-  items.push_back(Item{"foo", 0, 0});
-  GildedRose app(items);
-  app.updateQuality();
-  REQUIRE("fixme" == app.items[0].name);
+  SECTION("A normal item with 10 sell in days left")
+  {
+    items.push_back(Item{"foo", 10, 0});
+    GildedRose{items}.updateQuality();
+    ApprovalTests::Approvals::verify(items[0]);
+  }
 }
