@@ -1,1 +1,0 @@
-name: foo, sellIn: 9, quality: 0

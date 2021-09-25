@@ -10,13 +10,28 @@ std::ostream& operator<<(std::ostream& os, const Item& obj)
             << ", quality: " << obj.quality; //
 }
 
+bool operator==(const Item& lhs, const Item& rhs)
+{
+  return lhs.name == rhs.name && lhs.sellIn == rhs.sellIn &&
+         lhs.quality == rhs.quality;
+}
+
 TEST_CASE("UpdateQuality")
 {
+  using ApprovalTests::Approvals;
+
   std::vector<Item> items;
-  SECTION("A normal item with 10 sell in days left")
+  SECTION("both sell in days and quality decrease normally")
+  {
+    items.push_back(Item{"foo", 10, 10});
+    GildedRose{items}.updateQuality();
+    REQUIRE(items[0] == Item{"foo", 9, 9});
+  }
+
+  SECTION("Quality should never be negative")
   {
     items.push_back(Item{"foo", 10, 0});
     GildedRose{items}.updateQuality();
-    ApprovalTests::Approvals::verify(items[0]);
+    REQUIRE(items[0] == Item{"foo", 9, 0});
   }
 }
