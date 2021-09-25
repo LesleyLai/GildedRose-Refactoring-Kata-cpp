@@ -28,7 +28,7 @@ TEST_CASE("UpdateQuality")
 {
   SECTION("Normal item")
   {
-    const std::string name = "foo";
+    constexpr const char* name = "foo";
 
     SECTION("both sell in days and quality decrease normally")
     {
@@ -48,7 +48,7 @@ TEST_CASE("UpdateQuality")
 
   SECTION("Aged Brie")
   {
-    const std::string name = "Aged Brie";
+    constexpr const char* name = "Aged Brie";
     SECTION("increases quality over time")
     {
       testGildedRose(Item{name, 10, 10}, Item{name, 9, 11});
@@ -66,14 +66,14 @@ TEST_CASE("UpdateQuality")
   {
     SECTION("never has to be sold or decreases in Quality")
     {
-      const std::string name = "Sulfuras, Hand of Ragnaros";
+      constexpr const char* name = "Sulfuras, Hand of Ragnaros";
       testGildedRose(Item{name, 10, 80}, Item{name, 10, 80});
     }
   }
 
   SECTION("Backstage passes")
   {
-    const std::string name = "Backstage passes to a TAFKAL80ETC concert";
+    constexpr const char* name = "Backstage passes to a TAFKAL80ETC concert";
     SECTION("increases in Quality as its SellIn value approaches")
     {
       testGildedRose(Item{name, 20, 20}, Item{name, 19, 21});
